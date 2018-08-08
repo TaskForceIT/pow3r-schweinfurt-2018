@@ -20,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/TaskForceIT/pow3r-schweinfurt-2018/issues"
   },
-  "homepage": "https://taskforce-it.de"
+  "homepage": "https://taskforce-it.de",
+  "dependencies": {
+    "d3": "^5.5.0",
+    "express": "^4.16.3",
+    "nodemon": "^1.18.3",
+    "socket.io": "^2.1.1"
+  }
 }
