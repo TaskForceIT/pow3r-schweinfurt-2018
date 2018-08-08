@@ -1,0 +1,24 @@
+{
+  "name": "pow3r-schweinfurt-2018",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "task-force it-consulting",
+    "task-force",
+    "pow3r",
+    "pow3r 2018"
+  ],
+  "author": "Task Force IT-Consulting GmbH info@taskforce-it.de (https://taskforce-it.de)",
+  "contributors": [
+    "Kerim Güney kerim.gueney@taskforce-it.de (https://taskforce-it.de)"
+  ],
+  "license": "SEE LICENSE FILE",
+  "bugs": {
+    "url": "https://github.com/TaskForceIT/pow3r-schweinfurt-2018/issues"
+  },
+  "homepage": "https://taskforce-it.de"
+}
