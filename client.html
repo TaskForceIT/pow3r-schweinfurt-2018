@@ -6,14 +6,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
+    crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js" integrity="sha256-pMea2a/7QK1RhYpSh7rIpKSajxu4j61VmpJCJ31KrfA="
     crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js" integrity="sha256-gfQwA6PlkZsLqWu4bU4hXPrbTqzixm0B5MdvBLI+Oas="
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 
 <body>
-  <h1>hello</h1>
+  <div id="graph"></div>
   <script>
+    var numberOfClients = 0;
     var socket = io("http://localhost:3000");
+    socket.on("users", (data) => {
+      numberOfClients = data;
+    })
+    var time = new Date();
+
+    var trace1 = {
+      x: [time],
+      y: [numberOfClients],
+      mode: 'line',
+      hoverinfo: "none",
+    };
+
+    var toPlot = [trace1];
+
+    var layout = {
+      showlegend: true,
+      yaxis: {
+        title: 'Verbindungen',
+        showgrid: true,
+        dtick: 1
+      },
+    };
+
+    Plotly.plot('graph', toPlot, layout);
+
+    function update() {
+      var time = new Date();
+      var pastTime = new Date(Date.now() - 15000);
+      var futureTime = new Date(Date.now() + 15000);
+
+      Plotly.extendTraces('graph', {
+        x: [[time]],
+        y: [[numberOfClients]]
+      }, [0])
+
+      Plotly.relayout('graph', {
+        xaxis: {
+          range: [pastTime, futureTime],
+          showgrid: true,
+          gridcolor: '#888',
+        }
+      });
+
+      requestAnimationFrame(update);
+    }
+
+
+    requestAnimationFrame(update);
+
   </script>
 </body>
 
