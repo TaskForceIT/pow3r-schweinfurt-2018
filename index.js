@@ -2,13 +2,15 @@ const app = require("express")();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
+let numberOfClients = 0;
+
 io.on("connection", client => {
-  console.log("client connected");
-  client.on("event", data => {
-    console.log(data);
-  });
+  numberOfClients++;
+  io.sockets.emit("users", numberOfClients);
+
   client.on("disconnect", () => {
-    console.log("client disconnected");
+    numberOfClients--;
+    io.sockets.emit("users", numberOfClients);
   });
 });
 
