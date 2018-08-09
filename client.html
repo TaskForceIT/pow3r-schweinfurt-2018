@@ -30,6 +30,7 @@
       y: [numberOfClients],
       mode: 'line',
       hoverinfo: "none",
+      name: "Anzahl der Verbindungen"
     };
 
     var toPlot = [trace1];
@@ -53,13 +54,14 @@
       Plotly.extendTraces('graph', {
         x: [[time]],
         y: [[numberOfClients]]
-      }, [0])
+      }, [0]);
 
       Plotly.relayout('graph', {
         xaxis: {
           range: [pastTime, futureTime],
-          showgrid: true,
-          gridcolor: '#888',
+        },
+        yaxis: {
+          autoscale: true
         }
       });
 
