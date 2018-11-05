@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js" integrity="sha256-pMea2a/7QK1RhYpSh7rIpKSajxu4j61VmpJCJ31KrfA="
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.css" integrity="sha256-dMQYvN6BU9M4mHK94P22cZ4dPGTSGOVP41yVXvXatws="
+    crossorigin="anonymous" />
+</head>
+
+<body>
+  <div class="container" style="text-align: center">
+    <h3 class="title is-3">Ihre ID ist:</h3>
+    <h1 id="title" class="title is-1"></h1>
+  </div>
+
+  <div id="sendModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <textarea id="message-to-send" class="textarea" placeholder="Nachricht eingeben..."></textarea>
+      <a id="send-message" class="button is-primary">Senden</a>
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+  </div>
+
+  <div id="receiveModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <article class="message is-primary">
+        <div class="message-header">
+          <p>Nachricht</p>
+          <button class="delete" aria-label="delete"></button>
+        </div>
+        <div id="received-message" class="message-body">
+        </div>
+      </article>
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+  </div>
+
+  <script>
+    var socket = io("http://localhost:3000");
+    var title;
+    var message;
+    var sendModal = document.getElementById("sendModal");
+    var receiveModal = document.getElementById("receiveModal");
+    var button = document.getElementById("send-message");
+
+    socket.on("clientId", data => {
+      title = document.getElementById('title');
+      title.innerHTML = data;
+    });
+
+    socket.on("selection", data => {
+      sendModal.classList.add("is-active");
+    });
+
+    socket.on("message", data => {
+      document.getElementById("received-message").innerHTML = data;
+      receiveModal.classList.add("is-active");
+    });
+
+    button.addEventListener("click", (e) => {
+      message = document.getElementById("message-to-send").value;
+      sendModal.classList.remove("is-active");
+      socket.emit("sendMessage", message);
+    });
+
+  </script>
+</body>
+
+</html>
