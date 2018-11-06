@@ -2,8 +2,12 @@ const fs = require("fs");
 const app = require("express")();
 const server = require("https").createServer(
   {
-    key: fs.readFileSync("/etc/letsencrypt/live/p3.gueney.org/privkey.pem"),
-    cert: fs.readFileSync("/etc/letsencrypt/live/p3.gueney.org/fullchain.pem")
+    key: fs.readFileSync(
+      "/etc/letsencrypt/live/p3.taskforce-it.de/privkey.pem"
+    ),
+    cert: fs.readFileSync(
+      "/etc/letsencrypt/live/p3.taskforce-it.de/fullchain.pem"
+    )
   },
   app
 );

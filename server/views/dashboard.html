@@ -19,7 +19,7 @@
   <div id="graph"></div>
   <script>
     var numberOfClients = 0;
-    var socket = io("https://p3.gueney.org", { secure: true });
+    var socket = io("https://p3.taskforce-it.de", { secure: true });
     socket.on("users", (data) => {
       numberOfClients = data;
     });
