@@ -64,7 +64,7 @@ app.get("/dash", (req, res) => {
   res.sendFile(path.join(__dirname + "/views/dashboard.html"));
 });
 
-server.listen(3000, () => {
+server.listen(443, () => {
   console.log("Listening on http://localhost:443");
 });
 
