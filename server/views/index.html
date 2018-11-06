@@ -12,6 +12,15 @@
     crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.css" integrity="sha256-dMQYvN6BU9M4mHK94P22cZ4dPGTSGOVP41yVXvXatws="
     crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js" integrity="sha256-gfQwA6PlkZsLqWu4bU4hXPrbTqzixm0B5MdvBLI+Oas="
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <style>
+    .svg-container {
+      margin: auto !important;
+    }
+  </style>
 </head>
 
 <body>
@@ -44,6 +53,10 @@
     <button class="modal-close is-large" aria-label="close"></button>
   </div>
 
+  <div class="container" id="pie">
+
+  </div>
+
   <script>
     var socket = io("http://localhost:3000");
     var title;
@@ -71,6 +84,21 @@
       sendModal.classList.remove("is-active");
       socket.emit("sendMessage", message);
     });
+
+    var data = [{
+      values: [19, 26, 55],
+      labels: ['iOS', 'Android', 'Windows'],
+      type: 'pie'
+    }];
+
+    var layout = {
+      height: 400,
+      width: 320,
+      showlegend: true,
+      legend: { "orientation": "h" }
+    };
+
+    Plotly.newPlot('pie', data, layout, { displayModeBar: false });
 
   </script>
 </body>
