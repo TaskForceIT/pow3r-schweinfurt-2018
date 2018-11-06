@@ -1,5 +1,12 @@
+const fs = require("fs");
 const app = require("express")();
-const server = require("http").createServer(app);
+const server = require("https").createServer(
+  {
+    key: fs.readFileSync("/etc/letsencrypt/live/p3.gueney.org/privkey.pem"),
+    cert: fs.readFileSync("/etc/letsencrypt/live/p3.gueney.org/fullchain.pem")
+  },
+  app
+);
 const io = require("socket.io")(server);
 const generateId = require("./idGenerator");
 const path = require("path");
@@ -58,7 +65,7 @@ app.get("/dash", (req, res) => {
 });
 
 server.listen(3000, () => {
-  console.log("Listening on http://localhost:3000");
+  console.log("Listening on http://localhost:443");
 });
 
 function generateRandomId() {
