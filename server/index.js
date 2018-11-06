@@ -14,6 +14,7 @@ const server = require("https").createServer(
 const io = require("socket.io")(server);
 const generateId = require("./idGenerator");
 const path = require("path");
+const payload = require("./payload.json");
 
 let clients = [];
 let userAgents = [];
@@ -56,6 +57,10 @@ io.on("connection", client => {
   });
 });
 
+io.on("benchmark", client => {
+  client.emit("benchmark", payload);
+});
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname + "/views/index.html"));
 });
@@ -66,6 +71,14 @@ app.get("/admin", (req, res) => {
 
 app.get("/dash", (req, res) => {
   res.sendFile(path.join(__dirname + "/views/dashboard.html"));
+});
+
+app.get("/bench", (req, res) => {
+  res.sendFile(path.join(__dirname + "/views/benchmark.html"));
+});
+
+app.get("/benchmark", (req, res) => {
+  res.json(payload);
 });
 
 server.listen(443, () => {
