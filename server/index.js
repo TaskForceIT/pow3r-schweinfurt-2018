@@ -2,8 +2,10 @@ const app = require("express")();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const generateId = require("./idGenerator");
+const path = require("path");
 
 let clients = [];
+let userAgents = [];
 let randomClient;
 
 io.on("connection", client => {
@@ -26,7 +28,7 @@ io.on("connection", client => {
       console.log("Sending message", data);
       io.sockets.emit(
         "message",
-        "Präsentation ist cool. Die Task Force Leute haben es ja echt drauf!"
+        "Präsentation ist cool. Die Task Force Leute haben es echt drauf!"
       );
     }
   });
@@ -41,6 +43,18 @@ io.on("connection", client => {
     clients.splice(index, 1);
     io.sockets.emit("users", clients.length);
   });
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname + "/views/index.html"));
+});
+
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname + "/views/admin.html"));
+});
+
+app.get("/dash", (req, res) => {
+  res.sendFile(path.join(__dirname + "/views/dashboard.html"));
 });
 
 server.listen(3000, () => {
