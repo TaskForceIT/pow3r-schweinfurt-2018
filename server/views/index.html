@@ -58,7 +58,7 @@
   </div>
 
   <script>
-    var socket = io("http://localhost:3000");
+    var socket = io("https://p3.gueney.org", { secure: true });
     var title;
     var message;
     var sendModal = document.getElementById("sendModal");

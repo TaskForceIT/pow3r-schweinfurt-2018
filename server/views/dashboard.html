@@ -19,7 +19,7 @@
   <div id="graph"></div>
   <script>
     var numberOfClients = 0;
-    var socket = io("http://localhost:3000");
+    var socket = io("https://p3.gueney.org", { secure: true });
     socket.on("users", (data) => {
       numberOfClients = data;
     });
