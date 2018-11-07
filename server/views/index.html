@@ -64,6 +64,18 @@
     var sendModal = document.getElementById("sendModal");
     var receiveModal = document.getElementById("receiveModal");
     var button = document.getElementById("send-message");
+    var plotData = [{
+      values: [],
+      labels: ['Android', 'iOS', 'Windows', 'Unbekannt'],
+      type: 'pie'
+    }];
+
+    var layout = {
+      height: 400,
+      width: 320,
+      showlegend: true,
+      legend: { "orientation": "h" }
+    };
 
     socket.on("clientId", data => {
       title = document.getElementById('title');
@@ -73,6 +85,12 @@
     socket.on("selection", data => {
       sendModal.classList.add("is-active");
     });
+
+    socket.on("user-agents", data => {
+      console.log(data)
+      plotData[0].values = [data.Android, data.iOS, data.Windows, data.Unbekannt];
+      Plotly.newPlot('pie', plotData, layout, { displayModeBar: false });
+    })
 
     socket.on("message", data => {
       document.getElementById("received-message").innerHTML = data;
@@ -84,22 +102,6 @@
       sendModal.classList.remove("is-active");
       socket.emit("sendMessage", message);
     });
-
-    var data = [{
-      values: [19, 26, 55],
-      labels: ['iOS', 'Android', 'Windows'],
-      type: 'pie'
-    }];
-
-    var layout = {
-      height: 400,
-      width: 320,
-      showlegend: true,
-      legend: { "orientation": "h" }
-    };
-
-    Plotly.newPlot('pie', data, layout, { displayModeBar: false });
-
   </script>
 </body>
 
