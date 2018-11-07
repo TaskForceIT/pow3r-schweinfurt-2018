@@ -57,10 +57,6 @@ io.on("connection", client => {
   });
 });
 
-io.on("benchmark", client => {
-  client.emit("benchmark", payload);
-});
-
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname + "/views/index.html"));
 });
