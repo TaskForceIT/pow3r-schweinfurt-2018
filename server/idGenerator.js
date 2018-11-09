@@ -47,4 +47,15 @@ function getId() {
   return adjectives[adjectiveId] + " " + animals[animalId];
 }
 
-module.exports = getId;
+function generateRandomId() {
+  let customId;
+  let exists = [];
+
+  do {
+    customId = getId();
+    exists = clients.filter(element => element.customId === customId);
+  } while (exists.length);
+  return customId;
+}
+
+module.exports = generateRandomId;

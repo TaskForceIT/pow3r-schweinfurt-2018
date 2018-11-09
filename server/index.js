@@ -20,7 +20,7 @@ if (fs.existsSync("/etc/letsencrypt/live/p3.taskforce-it.de/privkey.pem")) {
 }
 
 const io = require("socket.io")(server);
-const generateId = require("./idGenerator");
+const generateRandomId = require("./idGenerator");
 const path = require("path");
 
 let clients = [];
@@ -106,14 +106,3 @@ app.get("/dash", (req, res) => {
 server.listen(443, () => {
   console.log("Listening on http://localhost:443");
 });
-
-function generateRandomId() {
-  let customId;
-  let exists = [];
-
-  do {
-    customId = generateId();
-    exists = clients.filter(element => element.customId === customId);
-  } while (exists.length);
-  return customId;
-}
