@@ -21,6 +21,7 @@ io.on("connection", client => {
     clients.push(client);
     client.emit("clientId", client.customId);
     userAgents[detectUserAgent(client)]++;
+    console.log("Connected: ", client.customId);
   }
 
   io.sockets.emit("users", clients.length);
@@ -42,7 +43,7 @@ io.on("connection", client => {
   });
 
   client.on("disconnect", () => {
-    console.log(`client: ${client.customId} disconnected`);
+    console.log("Disconnected: ", client.customId);
     let index = clients.filter((element, index) => {
       if (client.id === element.id) {
         userAgents[detectUserAgent(element)]--;
