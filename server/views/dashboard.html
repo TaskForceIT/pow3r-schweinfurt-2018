@@ -1,94 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js"
+      integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"
+      integrity="sha256-pMea2a/7QK1RhYpSh7rIpKSajxu4j61VmpJCJ31KrfA="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"
+      integrity="sha256-gfQwA6PlkZsLqWu4bU4hXPrbTqzixm0B5MdvBLI+Oas="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js" integrity="sha256-pMea2a/7QK1RhYpSh7rIpKSajxu4j61VmpJCJ31KrfA="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js" integrity="sha256-gfQwA6PlkZsLqWu4bU4hXPrbTqzixm0B5MdvBLI+Oas="
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-</head>
-
-<body>
-  <div id="graph"></div>
-  <script>
-    var numberOfClients = 0;
-    var socket = io("https://p3.taskforce-it.de", { query: { admin: 1 }, secure: true });
-    socket.on("users", (data) => {
-      numberOfClients = data;
-    });
-
-    socket.on("selection", data => {
-      console.log("You have been chosen");
-    });
-
-    socket.on("message", data => {
-      console.log(data);
-    });
-
-    var time = new Date();
-
-    var trace1 = {
-      x: [time],
-      y: [numberOfClients],
-      mode: 'line',
-      hoverinfo: "none",
-      name: "Anzahl der Verbindungen"
-    };
-
-    var toPlot = [trace1];
-
-    var layout = {
-      showlegend: true,
-      yaxis: {
-        title: 'Verbindungen',
-        showgrid: true,
-        dtick: 1
-      },
-    };
-
-    Plotly.plot('graph', toPlot, layout);
-
-    function update() {
-      var time = new Date();
-      var pastTime = new Date(Date.now() - 15000);
-      var futureTime = new Date(Date.now() + 15000);
-
-      trace1.x.push(time);
-      trace1.y.push(numberOfClients);
-
-      // Plotly.extendTraces('graph', {
-      //   x: [[time]],
-      //   y: [[numberOfClients]]
-      // }, [0]);
-
-      if (trace1.x.length > 2000) {
-        trace1.x.shift();
-        trace1.y.shift();
-      }
-
-
-      Plotly.relayout('graph', {
-        xaxis: {
-          range: [pastTime, futureTime],
-        },
-        yaxis: {
-        }
+  <body>
+    <div id="graph"></div>
+    <script>
+      var numberOfClients = 0;
+      var socket = io("https://p3.taskforce-it.de", {
+        query: { admin: 1 },
+        secure: true
+      });
+      socket.on("users", data => {
+        numberOfClients = data;
       });
 
+      socket.on("selection", data => {
+        console.log("You have been chosen");
+      });
+
+      socket.on("message", data => {
+        console.log(data);
+      });
+
+      var time = new Date();
+
+      var trace1 = {
+        x: [time],
+        y: [numberOfClients],
+        mode: "line",
+        hoverinfo: "none",
+        name: "Anzahl der Verbindungen"
+      };
+
+      var toPlot = [trace1];
+
+      var layout = {
+        showlegend: true,
+        yaxis: {
+          title: "Verbindungen",
+          showgrid: true,
+          dtick: 1
+        }
+      };
+
+      Plotly.plot("graph", toPlot, layout);
+
+      function update() {
+        var time = new Date();
+        var pastTime = new Date(Date.now() - 15000);
+        var futureTime = new Date(Date.now() + 15000);
+
+        trace1.x.push(time);
+        trace1.y.push(numberOfClients);
+
+        // Plotly.extendTraces('graph', {
+        //   x: [[time]],
+        //   y: [[numberOfClients]]
+        // }, [0]);
+
+        if (trace1.x.length > 2000) {
+          trace1.x.shift();
+          trace1.y.shift();
+        }
+
+        Plotly.relayout("graph", {
+          xaxis: {
+            range: [pastTime, futureTime]
+          },
+          yaxis: {}
+        });
+
+        requestAnimationFrame(update);
+      }
+
       requestAnimationFrame(update);
-    }
-
-
-    requestAnimationFrame(update);
-
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>
