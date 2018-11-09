@@ -1,9 +1,10 @@
 const config = require("./config.json");
 const path = require("path");
-const generateRandomId = require("./idGenerator");
 const app = require("express")();
 const server = require("./createServer")(config, app);
 const io = require("socket.io")(server);
+const generateRandomId = require("./idGenerator");
+const detectUserAgent = require("./detectUserAgent");
 
 let clients = [];
 let userAgents = {
@@ -15,20 +16,11 @@ let userAgents = {
 let randomClient;
 
 io.on("connection", client => {
-  let userAgent = client.handshake.headers["user-agent"];
   if (!client.handshake.query.admin) {
     client.customId = generateRandomId(clients);
     clients.push(client);
     client.emit("clientId", client.customId);
-    if (userAgent.match(/windows/gi)) {
-      userAgents.Windows++;
-    } else if (userAgent.match(/android/gi)) {
-      userAgents.Android++;
-    } else if (userAgent.match(/mac os/gi)) {
-      userAgents.iOS++;
-    } else {
-      userAgents.Unbekannt++;
-    }
+    userAgents[detectUserAgent(client)]++;
   }
 
   io.sockets.emit("users", clients.length);
@@ -53,17 +45,7 @@ io.on("connection", client => {
     console.log(`client: ${client.customId} disconnected`);
     let index = clients.filter((element, index) => {
       if (client.id === element.id) {
-        let thisUserAgent = element.handshake.headers["user-agent"];
-
-        if (thisUserAgent.match(/windows/gi)) {
-          userAgents.Windows--;
-        } else if (thisUserAgent.match(/android/gi)) {
-          userAgents.Android--;
-        } else if (thisUserAgent.match(/mac os/gi)) {
-          userAgents.iOS--;
-        } else {
-          userAgents.Unbekannt--;
-        }
+        userAgents[detectUserAgent(element)]--;
         return index;
       }
     });
