@@ -1,27 +1,8 @@
-const fs = require("fs");
+const config = require("./config.json");
 const path = require("path");
-const app = require("express")();
-const https = require("https");
-const http = require("http");
 const generateRandomId = require("./idGenerator");
-
-let server;
-if (fs.existsSync("/etc/letsencrypt/live/p3.taskforce-it.de/privkey.pem")) {
-  server = https.createServer(
-    {
-      key: fs.readFileSync(
-        "/etc/letsencrypt/live/p3.taskforce-it.de/privkey.pem"
-      ),
-      cert: fs.readFileSync(
-        "/etc/letsencrypt/live/p3.taskforce-it.de/fullchain.pem"
-      )
-    },
-    app
-  );
-} else {
-  server = http.createServer(app);
-}
-
+const app = require("express")();
+const server = require("./createServer")(config, app);
 const io = require("socket.io")(server);
 
 let clients = [];
@@ -104,6 +85,6 @@ app.get("/dash", (req, res) => {
   res.sendFile(path.join(__dirname + "/views/dashboard.html"));
 });
 
-server.listen(443, () => {
-  console.log("Listening on http://localhost:443");
+server.listen(config.port, () => {
+  console.log("Listening on port ", config.port);
 });
