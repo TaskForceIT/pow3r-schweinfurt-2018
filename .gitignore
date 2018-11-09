@@ -1,6 +1,9 @@
 
 # Created by https://www.gitignore.io/api/git,node,windows,visualstudiocode
 
+### Server configuration file ###
+config.json
+
 ### Git ###
 *.orig
 
