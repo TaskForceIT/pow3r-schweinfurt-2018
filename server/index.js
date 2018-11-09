@@ -22,7 +22,6 @@ if (fs.existsSync("/etc/letsencrypt/live/p3.taskforce-it.de/privkey.pem")) {
 const io = require("socket.io")(server);
 const generateId = require("./idGenerator");
 const path = require("path");
-const payload = require("./payload.json");
 
 let clients = [];
 let userAgents = {
@@ -102,14 +101,6 @@ app.get("/admin", (req, res) => {
 
 app.get("/dash", (req, res) => {
   res.sendFile(path.join(__dirname + "/views/dashboard.html"));
-});
-
-app.get("/bench", (req, res) => {
-  res.sendFile(path.join(__dirname + "/views/benchmark.html"));
-});
-
-app.get("/benchmark", (req, res) => {
-  res.json(payload);
 });
 
 server.listen(443, () => {
