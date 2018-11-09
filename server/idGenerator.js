@@ -47,7 +47,7 @@ function getId() {
   return adjectives[adjectiveId] + " " + animals[animalId];
 }
 
-function generateRandomId() {
+function generateRandomId(clients) {
   let customId;
   let exists = [];
 

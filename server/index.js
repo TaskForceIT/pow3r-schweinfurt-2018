@@ -35,7 +35,7 @@ let randomClient;
 io.on("connection", client => {
   let userAgent = client.handshake.headers["user-agent"];
   if (!client.handshake.query.admin) {
-    client.customId = generateRandomId();
+    client.customId = generateRandomId(clients);
     clients.push(client);
     client.emit("clientId", client.customId);
     if (userAgent.match(/windows/gi)) {
