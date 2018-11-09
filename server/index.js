@@ -1,7 +1,10 @@
 const fs = require("fs");
+const path = require("path");
 const app = require("express")();
 const https = require("https");
 const http = require("http");
+const generateRandomId = require("./idGenerator");
+
 let server;
 if (fs.existsSync("/etc/letsencrypt/live/p3.taskforce-it.de/privkey.pem")) {
   server = https.createServer(
@@ -20,8 +23,6 @@ if (fs.existsSync("/etc/letsencrypt/live/p3.taskforce-it.de/privkey.pem")) {
 }
 
 const io = require("socket.io")(server);
-const generateRandomId = require("./idGenerator");
-const path = require("path");
 
 let clients = [];
 let userAgents = {
