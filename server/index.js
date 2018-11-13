@@ -14,9 +14,15 @@ let userAgents = {
   Unbekannt: 0
 };
 let randomClient;
+let dashboardClient;
+let adminClient;
 
 io.on("connection", client => {
-  if (!client.handshake.query.admin) {
+  if (client.handshake.query.admin) {
+    adminClient = client;
+  } else if (client.handshake.query.dashboard) {
+    dashboardClient = client;
+  } else {
     client.customId = generateRandomId(clients);
     clients.push(client);
     client.emit("clientId", client.customId);

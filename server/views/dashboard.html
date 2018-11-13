@@ -28,7 +28,7 @@
     <script>
       var numberOfClients = 0;
       var socket = io("https://p3.taskforce-it.de", {
-        query: { admin: 1 },
+        query: { dashboard: 1 },
         secure: true
       });
       socket.on("users", data => {
