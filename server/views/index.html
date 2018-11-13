@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>Node.js Real-Time WebSockets</title>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js"
       integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
@@ -71,7 +71,7 @@
     <div class="container" id="pie" style="margin-top: 1em;"></div>
 
     <script>
-      var socket = io("https://p3.taskforce-it.de", { secure: true });
+      var socket = io("http://localhost:8080", { secure: true });
       var title;
       var message;
       var sendModal = document.getElementById("sendModal");
