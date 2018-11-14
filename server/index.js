@@ -20,6 +20,16 @@ let adminClient;
 io.on("connection", client => {
   if (client.handshake.query.admin) {
     adminClient = client;
+    adminClient.on("admin", () => {
+      console.log("select random client");
+      if (randomClient) {
+        console.log("deselect random");
+        randomClient.emit("deselected");
+      }
+      randomClient = clients[Math.floor(Math.random() * clients.length)];
+      console.log(randomClient.customId + " selected");
+      randomClient.emit("selected");
+    });
   } else if (client.handshake.query.dashboard) {
     dashboardClient = client;
   } else {
@@ -33,17 +43,12 @@ io.on("connection", client => {
   io.sockets.emit("users", clients.length);
   io.sockets.emit("user-agents", userAgents);
 
-  client.on("admin", data => {
-    randomClient = clients[Math.floor(Math.random() * clients.length)];
-    randomClient.emit("selection");
-  });
-
   client.on("sendMessage", data => {
     if (client.id === randomClient.id) {
       console.log("Sending message", data);
       io.sockets.emit(
         "message",
-        "Präsentation ist cool. Die Task Force Leute haben es echt drauf!"
+        "Diese Präsentation ist cool. Die Task Force Leute haben es echt drauf!"
       );
     }
   });
