@@ -32,6 +32,9 @@
       .svg-container {
         margin: auto !important;
       }
+      .modal-content {
+        max-width: 95%;
+      }
     </style>
   </head>
 
@@ -49,7 +52,10 @@
           class="textarea"
           placeholder="Nachricht eingeben..."
         ></textarea>
-        <a id="send-message" class="button is-primary">Senden</a>
+
+        <a style="margin-top: 5px;" id="send-message" class="button is-primary"
+          >Senden</a
+        >
       </div>
       <button class="modal-close is-large" aria-label="close"></button>
     </div>
@@ -68,7 +74,7 @@
     <div class="container" id="pie" style="margin-top: 1em;"></div>
 
     <script>
-      var socket = io("https://p3.taskforce-it.de", { secure: true });
+      var socket = io("localhost:8080", { secure: true });
       var title;
       var message;
       var sendModal = document.getElementById("sendModal");
