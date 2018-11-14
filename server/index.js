@@ -58,7 +58,7 @@ io.on("connection", client => {
     clients.filter((element, index) => {
       if (client.id === element.id) {
         userAgents[detectUserAgent(element)]--;
-        clients.splice(index[0], 1);
+        clients.splice(index, 1);
       }
     });
     io.sockets.emit("user-agents", userAgents);
