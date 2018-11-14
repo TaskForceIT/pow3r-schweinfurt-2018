@@ -58,10 +58,7 @@
       <div class="modal-background"></div>
       <div class="modal-content">
         <article class="message is-primary">
-          <div class="message-header">
-            <p>Nachricht</p>
-            <button class="delete" aria-label="delete"></button>
-          </div>
+          <div class="message-header"><p>Nachricht</p></div>
           <div id="received-message" class="message-body"></div>
         </article>
       </div>
@@ -71,12 +68,14 @@
     <div class="container" id="pie" style="margin-top: 1em;"></div>
 
     <script>
-      var socket = io("http://localhost:8080", { secure: true });
+      var socket = io("https://p3.taskforce-it.de", { secure: true });
       var title;
       var message;
       var sendModal = document.getElementById("sendModal");
       var receiveModal = document.getElementById("receiveModal");
       var button = document.getElementById("send-message");
+      var closeButton = document.querySelectorAll(".modal-close");
+
       var plotData = [
         {
           values: [],
@@ -97,8 +96,12 @@
         title.innerHTML = data;
       });
 
-      socket.on("selection", data => {
+      socket.on("selected", data => {
         sendModal.classList.add("is-active");
+      });
+
+      socket.on("deselected", data => {
+        sendModal.classList.remove("is-active");
       });
 
       socket.on("user-agents", data => {
@@ -121,6 +124,13 @@
         message = document.getElementById("message-to-send").value;
         sendModal.classList.remove("is-active");
         socket.emit("sendMessage", message);
+      });
+
+      Array.from(closeButton).forEach(link => {
+        link.addEventListener("click", function(event) {
+          sendModal.classList.remove("is-active");
+          receiveModal.classList.remove("is-active");
+        });
       });
     </script>
   </body>
