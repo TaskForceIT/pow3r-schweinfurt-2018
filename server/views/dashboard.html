@@ -88,7 +88,11 @@
           xaxis: {
             range: [pastTime, futureTime]
           },
-          yaxis: {}
+          yaxis: {
+            title: "Verbindungen",
+            showgrid: true,
+            dtick: 1
+          }
         });
 
         requestAnimationFrame(update);
