@@ -55,13 +55,12 @@ io.on("connection", client => {
 
   client.on("disconnect", () => {
     console.log("Disconnected: ", client.customId);
-    let index = clients.filter((element, index) => {
+    clients.filter((element, index) => {
       if (client.id === element.id) {
         userAgents[detectUserAgent(element)]--;
-        return index;
+        clients.splice(index[0], 1);
       }
     });
-    clients.splice(index, 1);
     io.sockets.emit("user-agents", userAgents);
     io.sockets.emit("users", clients.length);
   });
