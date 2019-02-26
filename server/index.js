@@ -1,7 +1,8 @@
 const env = process.env.NODE_ENV || "development";
 const config = require("./config.json")[env];
 const path = require("path");
-const app = require("express")();
+const express = require("express");
+const app = express();
 const server = require("./createServer")(config, app);
 const io = require("socket.io")(server);
 const generateRandomId = require("./idGenerator");
@@ -67,8 +68,12 @@ io.on("connection", client => {
   });
 });
 
+app.set("view engine", "pug");
+app.use("/static", express.static("views"));
+
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname + "/views/index.html"));
+  // res.sendFile(path.join(__dirname + "/views/index.html"));
+  res.render("index");
 });
 
 app.get("/admin", (req, res) => {
