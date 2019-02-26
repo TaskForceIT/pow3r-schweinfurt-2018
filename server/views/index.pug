@@ -1,0 +1,94 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0')
+    meta(http-equiv='X-UA-Compatible', content='ie=edge')
+    title Node.js Real-Time WebSockets
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js', integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=', crossorigin='anonymous')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js', integrity='sha256-RtMTraB5gGlLER0FkKBcaXCmZCQCxkKS/dXm7MSEoEY=', crossorigin='anonymous')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css', integrity='sha256-8B1OaG0zT7uYA572S2xOxWACq9NXYPQ+U5kHPV1bJN4=', crossorigin='anonymous')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.1/d3.min.js', integrity='sha256-RtVUDWfx0vF5nrvHDYcQoWSPaOuQ0R8Rq9kUG2kSvH8=', crossorigin='anonymous')
+    script(src='https://cdn.plot.ly/plotly-latest.min.js')
+    style.
+      .svg-container {
+      margin: auto !important;
+      }
+      .modal-content {
+      max-width: 95%;
+      }
+  body
+    .container(style='text-align: center')
+      h3.title.is-3 Ihre ID ist:
+      h1#title.title.is-1
+    #sendModal.modal
+      .modal-background
+      .modal-content
+        textarea#message-to-send.textarea(placeholder='Nachricht eingeben...')
+        a#send-message.button.is-primary(style='margin-top: 5px;') Senden
+      button.modal-close.is-large(aria-label='close')
+    #receiveModal.modal
+      .modal-background
+      .modal-content
+        article.message.is-primary
+          .message-header
+            p Nachricht
+          #received-message.message-body
+      button.modal-close.is-large(aria-label='close')
+    #pie.container(style='margin-top: 1em;')
+    script.
+      var socket = io("http://localhost:8080", { secure: true });
+      var title;
+      var message;
+      var sendModal = document.getElementById("sendModal");
+      var receiveModal = document.getElementById("receiveModal");
+      var button = document.getElementById("send-message");
+      var closeButton = document.querySelectorAll(".modal-close");
+      var plotData = [
+      {
+      values: [],
+      labels: ["Android", "iOS", "Windows", "Unbekannt"],
+      type: "pie"
+      }
+      ];
+      var layout = {
+      height: 400,
+      width: 320,
+      showlegend: true,
+      legend: { orientation: "h" }
+      };
+      socket.on("clientId", data => {
+      title = document.getElementById("title");
+      title.innerHTML = data;
+      });
+      socket.on("selected", data => {
+      sendModal.classList.add("is-active");
+      });
+      socket.on("deselected", data => {
+      sendModal.classList.remove("is-active");
+      });
+      socket.on("user-agents", data => {
+      console.log(data);
+      plotData[0].values = [
+      data.Android,
+      data.iOS,
+      data.Windows,
+      data.Unbekannt
+      ];
+      Plotly.newPlot("pie", plotData, layout, { displayModeBar: false });
+      });
+      socket.on("message", data => {
+      document.getElementById("received-message").innerHTML = data;
+      receiveModal.classList.add("is-active");
+      });
+      button.addEventListener("click", e => {
+      message = document.getElementById("message-to-send").value;
+      sendModal.classList.remove("is-active");
+      socket.emit("sendMessage", message);
+      });
+      Array.from(closeButton).forEach(link => {
+      link.addEventListener("click", function(event) {
+      sendModal.classList.remove("is-active");
+      receiveModal.classList.remove("is-active");
+      });
+      });
