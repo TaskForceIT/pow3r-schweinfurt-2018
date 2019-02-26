@@ -1,4 +1,5 @@
-const config = require("./config.json");
+const env = process.env.NODE_ENV || "development";
+const config = require("./config.json")[env];
 const path = require("path");
 const app = require("express")();
 const server = require("./createServer")(config, app);
@@ -79,5 +80,5 @@ app.get("/dash", (req, res) => {
 });
 
 server.listen(config.port, () => {
-  console.log("Listening on port ", config.port);
+  console.log(`Listening on ${config.url}:${config.port}`);
 });

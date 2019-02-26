@@ -1,8 +1,29 @@
 {
-  "port": 8080,
-  "ssl": {
-    "enabled": false,
-    "key": "",
-    "cert": ""
+  "development": {
+    "url": "http://localhost",
+    "port": 8080,
+    "ssl": {
+      "enabled": false,
+      "key": "",
+      "cert": ""
+    }
+  },
+  "test": {
+    "url": "http://localhost",
+    "port": 8080,
+    "ssl": {
+      "enabled": false,
+      "key": "",
+      "cert": ""
+    }
+  },
+  "production": {
+    "url": "http://notLocalhost",
+    "port": 8080,
+    "ssl": {
+      "enabled": false,
+      "key": "",
+      "cert": ""
+    }
   }
 }
