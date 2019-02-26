@@ -73,7 +73,7 @@ app.use("/static", express.static("views"));
 
 app.get("/", (req, res) => {
   // res.sendFile(path.join(__dirname + "/views/index.html"));
-  res.render("index");
+  res.render("index", { url: config.url, port: config.port });
 });
 
 app.get("/admin", (req, res) => {

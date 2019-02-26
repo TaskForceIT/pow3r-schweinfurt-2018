@@ -37,7 +37,11 @@ html(lang='en')
       button.modal-close.is-large(aria-label='close')
     #pie.container(style='margin-top: 1em;')
     script.
-      var socket = io("http://localhost:8080", { secure: true });
+      window.config = {
+        url: "#{url}",
+        port: "#{port}",
+      };
+      var socket = io(`${window.config.url}:${window.config.port}`, { secure: true });
       var title;
       var message;
       var sendModal = document.getElementById("sendModal");
