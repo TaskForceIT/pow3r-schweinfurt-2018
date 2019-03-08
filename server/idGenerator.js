@@ -1,4 +1,4 @@
-let animals = [
+const animals = [
   "Hase",
   "Tapir",
   "Adler",
@@ -12,10 +12,10 @@ let animals = [
   "Fisch",
   "Igel",
   "Springbock",
-  "Seelöwe"
+  "Seelöwe",
 ];
 
-let adjectives = [
+const adjectives = [
   "Schneller",
   "Fauler",
   "Süßer",
@@ -37,12 +37,12 @@ let adjectives = [
   "Sympathischer",
   "Leidenschaftlicher",
   "Fieser",
-  "Flinker"
+  "Flinker",
 ];
 
 function getId() {
-  let animalId = Math.floor(Math.random() * animals.length);
-  let adjectiveId = Math.floor(Math.random() * adjectives.length);
+  const animalId = Math.floor(Math.random() * animals.length);
+  const adjectiveId = Math.floor(Math.random() * adjectives.length);
 
   return adjectives[adjectiveId] + " " + animals[animalId];
 }

@@ -7,7 +7,7 @@ module.exports = function(config, app) {
     return https.createServer(
       {
         key: fs.readFileSync(config.ssl.key),
-        cert: fs.readFileSync(config.ssl.cert)
+        cert: fs.readFileSync(config.ssl.cert),
       },
       app
     );

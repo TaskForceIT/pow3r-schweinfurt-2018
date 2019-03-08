@@ -8,12 +8,12 @@ const io = require("socket.io")(server);
 const generateRandomId = require("./idGenerator");
 const detectUserAgent = require("./detectUserAgent");
 
-let clients = [];
-let userAgents = {
+const clients = [];
+const userAgents = {
   Android: 0,
   iOS: 0,
   Windows: 0,
-  Unbekannt: 0
+  Unbekannt: 0,
 };
 let randomClient;
 let adminClient;
@@ -31,8 +31,6 @@ io.on("connection", client => {
       console.log(randomClient.customId + " selected");
       randomClient.emit("selected");
     });
-  } else if (client.handshake.query.dashboard) {
-    dashboardClient = client;
   } else {
     client.customId = generateRandomId(clients);
     clients.push(client);
