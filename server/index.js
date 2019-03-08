@@ -16,7 +16,6 @@ let userAgents = {
   Unbekannt: 0
 };
 let randomClient;
-let dashboardClient;
 let adminClient;
 
 io.on("connection", client => {
