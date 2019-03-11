@@ -4,6 +4,7 @@ const path = require("path");
 const express = require("express");
 const app = express();
 const server = require("./createServer")(config, app);
+const cors = require("cors");
 const io = require("socket.io")(server);
 const generateRandomId = require("./idGenerator");
 const detectUserAgent = require("./detectUserAgent");
@@ -16,29 +17,13 @@ const userAgents = {
   Unbekannt: 0,
 };
 let randomClient;
-let adminClient;
 
 io.on("connection", client => {
-  if (client.handshake.query.admin) {
-    adminClient = client;
-    adminClient.on("admin", () => {
-      console.log("select random client");
-      if (randomClient) {
-        console.log("deselect random");
-        randomClient.emit("deselected");
-      }
-      randomClient = clients[Math.floor(Math.random() * clients.length)];
-      console.log(randomClient.customId + " selected");
-      randomClient.emit("selected");
-    });
-  } else {
-    client.customId = generateRandomId(clients);
-    clients.push(client);
-    client.emit("clientId", client.customId);
-    userAgents[detectUserAgent(client)]++;
-    console.log("Connected: ", client.customId);
-  }
-
+  client.customId = generateRandomId(clients);
+  clients.push(client);
+  client.emit("clientId", client.customId);
+  userAgents[detectUserAgent(client)]++;
+  console.log("Conndected: ", client.customId);
   io.sockets.emit("users", clients.length);
   io.sockets.emit("user-agents", userAgents);
 
@@ -67,14 +52,11 @@ io.on("connection", client => {
 
 app.set("view engine", "pug");
 app.use("/static", express.static("views"));
+app.use(cors());
 
 app.get("/", (req, res) => {
   // res.sendFile(path.join(__dirname + "/views/index.html"));
   res.render("index", { url: config.url, port: config.port });
-});
-
-app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname + "/views/admin.html"));
 });
 
 app.get("/dash", (req, res) => {
