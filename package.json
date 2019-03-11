@@ -23,6 +23,7 @@
   },
   "homepage": "https://taskforce-it.de",
   "dependencies": {
+    "cors": "^2.8.5",
     "d3": "^5.9.1",
     "express": "^4.16.4",
     "nodemon": "^1.18.10",
