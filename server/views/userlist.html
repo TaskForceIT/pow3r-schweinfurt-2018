@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Node.js Real-Time WebSockets</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"
+      integrity="sha256-RtMTraB5gGlLER0FkKBcaXCmZCQCxkKS/dXm7MSEoEY="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css"
+      integrity="sha256-8B1OaG0zT7uYA572S2xOxWACq9NXYPQ+U5kHPV1bJN4="
+      crossorigin="anonymous"
+    />
+
+    <style>
+      html,
+      body {
+        background-color: #ddeff9;
+        padding: 0;
+        margin: 0;
+      }
+
+      #user-list > li:nth-child(even) {
+        background-color: #9da4cc;
+      }
+
+      li.selected {
+        background-color: orange !important;
+        color: black;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <ul id="user-list"> </ul>
+    <script>
+      var socket = io("http://localhost:8080", {
+        query: { dashboard: 1 },
+        secure: true,
+      });
+
+      var userList = $("#user-list");
+
+      socket.on("userList", users => {
+        userList.empty();
+        users.forEach(e => {
+          var newLi = document.createElement("li");
+          var newContent = document.createTextNode(e.customId);
+          if (e.selected) {
+            newLi.classList.add("selected");
+          }
+          newLi.append(newContent);
+          userList.append(newLi);
+        });
+      });
+    </script>
+  </body>
+</html>
