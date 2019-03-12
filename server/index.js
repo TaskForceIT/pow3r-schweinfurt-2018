@@ -10,6 +10,8 @@ const generateRandomId = require("./idGenerator");
 const detectUserAgent = require("./detectUserAgent");
 
 const clients = [];
+const dashboardClients = [];
+
 const userAgents = {
   Android: 0,
   iOS: 0,
@@ -19,11 +21,18 @@ const userAgents = {
 let randomClient;
 
 io.on("connection", client => {
-  client.customId = generateRandomId(clients);
-  clients.push(client);
-  client.emit("clientId", client.customId);
-  userAgents[detectUserAgent(client)]++;
-  console.log("Conndected: ", client.customId);
+  if (!client.handshake.query.dashboard) {
+    client.customId = generateRandomId(clients);
+    clients.push(client);
+    client.emit("clientId", client.customId);
+    userAgents[detectUserAgent(client)]++;
+    console.log("Conndected: ", client.customId);
+  } else {
+    dashboardClients.push(client);
+  }
+
+  updateDashboards(dashboardClients);
+
   io.sockets.emit("users", clients.length);
   io.sockets.emit("user-agents", userAgents);
 
@@ -47,6 +56,7 @@ io.on("connection", client => {
     });
     io.sockets.emit("user-agents", userAgents);
     io.sockets.emit("users", clients.length);
+    updateDashboards(dashboardClients);
   });
 });
 
@@ -63,6 +73,39 @@ app.get("/dash", (req, res) => {
   res.sendFile(path.join(__dirname + "/views/dashboard.html"));
 });
 
+app.get("/users", (req, res) => {
+  res.sendFile(path.join(__dirname + "/views/userlist.html"));
+});
+
+app.get("/selectUser", (req, res) => {
+  if (randomClient) {
+    randomClient.selected = false;
+  }
+  randomClient = clients[Math.floor(Math.random() * clients.length)];
+  randomClient.selected = true;
+  res.statusCode = 200;
+  console.log("random user selected");
+  updateDashboards(dashboardClients);
+  res.json({ success: true, selectedUser: randomClient.customId });
+});
+
 server.listen(config.port, () => {
   console.log(`Listening on ${config.url}:${config.port}`);
 });
+
+function updateDashboards(dashboardClients) {
+  const userList = [];
+
+  if (dashboardClients.length > 0) {
+    clients.forEach(element => {
+      userList.push({
+        customId: element.customId,
+        selected: element.selected,
+      });
+    });
+    dashboardClients.forEach(dashboardClient => {
+      dashboardClient.emit("userList", userList);
+    });
+    console.log("emit userlist");
+  }
+}
