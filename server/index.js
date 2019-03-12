@@ -80,9 +80,11 @@ app.get("/users", (req, res) => {
 app.get("/selectUser", (req, res) => {
   if (randomClient) {
     randomClient.selected = false;
+    randomClient.emit("deselected");
   }
   randomClient = clients[Math.floor(Math.random() * clients.length)];
   randomClient.selected = true;
+  randomClient.emit("selected");
   res.statusCode = 200;
   console.log("random user selected");
   updateDashboards(dashboardClients);
