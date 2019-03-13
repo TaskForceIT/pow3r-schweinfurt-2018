@@ -6,8 +6,8 @@ const app = express();
 const server = require("./createServer")(config, app);
 const cors = require("cors");
 const io = require("socket.io")(server, {
-  pingInterval: 2000,
-  pingTimeout: 1000,
+  pingInterval: 8000,
+  pingTimeout: 3000,
 });
 const generateRandomId = require("./idGenerator");
 const detectUserAgent = require("./detectUserAgent");
