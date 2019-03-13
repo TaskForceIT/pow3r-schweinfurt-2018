@@ -34,7 +34,7 @@
       }
 
       #user-list > li:nth-child(even) {
-        background-color: #9da4cc;
+        background-color: #c5cae9;
       }
 
       li.selected {
@@ -47,7 +47,7 @@
   <body>
     <ul id="user-list"> </ul>
     <script>
-      var socket = io("http://localhost:8080", {
+      var socket = io("https://mid.taskforce-it.de", {
         query: { dashboard: 1 },
         secure: true,
       });

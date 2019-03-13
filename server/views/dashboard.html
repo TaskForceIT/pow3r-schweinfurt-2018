@@ -27,9 +27,9 @@
     <div id="graph"></div>
     <script>
       var numberOfClients = 0;
-      var socket = io("http://localhost:8080", {
+      var socket = io("https://mid.taskforce-it.de", {
         query: { dashboard: 1 },
-        secure: true
+        secure: true,
       });
       socket.on("users", data => {
         numberOfClients = data;
@@ -50,7 +50,7 @@
         y: [numberOfClients],
         mode: "line",
         hoverinfo: "none",
-        name: "Anzahl der Verbindungen"
+        name: "Anzahl der Verbindungen",
       };
 
       var toPlot = [trace1];
@@ -60,8 +60,8 @@
         yaxis: {
           title: "Verbindungen",
           showgrid: true,
-          dtick: 1
-        }
+          dtick: 1,
+        },
       };
 
       Plotly.plot("graph", toPlot, layout);
@@ -86,13 +86,13 @@
 
         Plotly.relayout("graph", {
           xaxis: {
-            range: [pastTime, futureTime]
+            range: [pastTime, futureTime],
           },
           yaxis: {
             title: "Verbindungen",
             showgrid: true,
-            dtick: 1
-          }
+            dtick: 1,
+          },
         });
 
         requestAnimationFrame(update);
