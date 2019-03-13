@@ -65,8 +65,8 @@ app.use("/static", express.static("views"));
 app.use(cors());
 
 app.get("/", (req, res) => {
-  // res.sendFile(path.join(__dirname + "/views/index.html"));
-  res.render("index", { url: config.url, port: config.port });
+  res.sendFile(path.join(__dirname + "/views/index.html"));
+  // res.render("index", { url: config.url, port: config.port });
 });
 
 app.get("/dash", (req, res) => {
