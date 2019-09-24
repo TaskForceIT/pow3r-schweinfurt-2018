@@ -77,15 +77,15 @@
     <div class="container" id="pie" style="margin-top: 1em;"></div>
 
     <script>
-      var socket = io("https://mid.taskforce-it.de", { secure: true });
-      var title;
-      var message;
-      var sendModal = document.getElementById("sendModal");
-      var receiveModal = document.getElementById("receiveModal");
-      var button = document.getElementById("send-message");
-      var closeButton = document.querySelectorAll(".modal-close");
+      let socket = io(window.location, { secure: true });
+      let title;
+      let message;
+      let sendModal = document.getElementById("sendModal");
+      let receiveModal = document.getElementById("receiveModal");
+      let button = document.getElementById("send-message");
+      let closeButton = document.querySelectorAll(".modal-close");
 
-      var plotData = [
+      let plotData = [
         {
           values: [],
           labels: ["Android", "iOS", "Windows", "Unbekannt"],
@@ -93,7 +93,7 @@
         },
       ];
 
-      var layout = {
+      let layout = {
         height: 400,
         width: 320,
         showlegend: true,
