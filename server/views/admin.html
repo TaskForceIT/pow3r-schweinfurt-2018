@@ -20,9 +20,9 @@
   <body>
     <div id="graph"></div>
     <script>
-      var socket = io("http://localhost:8080", {
+      var socket = io(window.location.href, {
         query: { admin: 1 },
-        secure: true
+        secure: true,
       });
     </script>
   </body>

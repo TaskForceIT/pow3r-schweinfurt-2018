@@ -27,7 +27,7 @@
     <div id="graph"></div>
     <script>
       var numberOfClients = 0;
-      var socket = io("https://mid.taskforce-it.de", {
+      var socket = io(window.location.href, {
         query: { dashboard: 1 },
         secure: true,
       });
